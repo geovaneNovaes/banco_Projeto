@@ -83,6 +83,11 @@ public class ClienteView extends javax.swing.JInternalFrame {
         jButton2.setText("Alterar");
 
         jButton3.setText("Excluir");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Novo");
 
@@ -200,6 +205,56 @@ JOptionPane.showMessageDialog(null, "Gravado com sucesso!");
 
   
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+ if (txtCodigo.getText().isEmpty()){
+           
+        
+         JOptionPane.showMessageDialog(null, "Selecione o código do Cliente!");
+       } else {
+           cliente = new Cliente();
+          
+           cliente.setCodigocliente(Integer.parseInt(txtCodigo.getText()));
+           int confirma = JOptionPane.showConfirmDialog(null,"Deseja realmente Excluir?"+ txtNome.getText());
+           if (confirma == 0){
+               
+               try {                  
+                   clienteDAO.excluir(cliente);
+               } catch (SQLException ex) {
+                   Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
+               }
+                   
+                   
+               
+               }
+           }
+           
+       
+    }                                      
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {                                           
+       if (txtCodigo.getText().isEmpty()){
+       
+       JOptionPane.showMessageDialog(null, "Selecione um Cliente!");
+       }
+       cliente = new Cliente();
+       cliente.setCodigocliente(Integer.parseInt(txtCodigo.getText()));
+       cliente.setNomeCliente(txtNome.getText());
+       cliente.setEnderecoCliente(txtEndereco.getText());
+       cliente.setBairroCliente(txtBairro.getText());
+        cliente.setCPFCliente(txtCPF.getText());
+       
+            try {
+                clienteDAO.alterar(cliente);
+                
+                 JOptionPane.showMessageDialog(null, "Cliente Alterado!");
+            } catch (SQLException ex) {
+                Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       
+       atualizarTabelaCliente(); 
+                       // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
