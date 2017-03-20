@@ -252,7 +252,7 @@ JOptionPane.showMessageDialog(null, "Gravado com sucesso!");
                 Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
             }
        
-       atualizarTabelaCliente(); 
+      
                        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 

@@ -65,6 +65,20 @@ public class ClienteDAO {
        
        
    }
+    public void alterar (Cliente cliente) throws SQLException{
+        sql = "update cliente set nome=?, endereco=?, bairro=?, CPF=? where codigo=?";
+        pst = Conexao.getInstance().prepareStatement(sql);
+         pst.setInt(5, cliente.getCodigocliente());
+        pst.setString(1, cliente.getNomeCliente());
+        pst.setString(2, cliente.getEnderecoCliente());
+        pst.setString(3, cliente.getBairroCliente());
+        pst.setString(4, cliente.getCPFCliente());
+        pst.setInt(5, cliente.getCodigocliente());
+        pst.execute();
+        pst.close();        
+        
+           
+    } 
     
    public void mostrarCliente (Cliente cliente )throws SQLException{
                sql = "select from cliente set nome=?, endereco=?, bairro=?, CPF=? where codigo=?";
