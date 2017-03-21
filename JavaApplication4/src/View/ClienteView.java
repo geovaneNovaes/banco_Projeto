@@ -13,24 +13,66 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-
 public class ClienteView extends javax.swing.JInternalFrame {
-        Cliente cliente;
-        ClienteDAO clienteDAO;
-        List<Cliente> ListaClientes;
-   
+
+    Cliente cliente;
+    ClienteDAO clienteDAO;
+    List<Cliente> ListaClientes;
+
     public ClienteView() {
-        
+
         clienteDAO = new ClienteDAO();
         ListaClientes = new ArrayList<>();
-       initComponents();
+        initComponents();
         this.setVisible(true);
-      
-     
-    }
-       
 
-    
+    }
+
+    public void atualizarTabelaCliente() {
+        cliente = new Cliente();
+        try {
+            ListaClientes = clienteDAO.ListaCliente();
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String dados[][] = new String[ListaClientes.size()][5];
+        int i = 0;
+        for (Cliente cliente : ListaClientes) {
+            dados[i][0] = String.valueOf(cliente.getCodigocliente());
+            dados[i][1] = cliente.getNomeCliente();
+            dados[i][2] = cliente.getEnderecoCliente();
+            dados[i][3] = cliente.getBairroCliente();
+            dados[i][4] = cliente.getCPFCliente();
+            i++;
+
+        }
+        String tituloColuna[] = {"codigo", "nome", "endereço", "bairro", "CPF"};
+        DefaultTableModel tabelaCliente = new DefaultTableModel();
+        tabelaCliente.setDataVector(dados, tituloColuna);
+        tblCliente.setModel(new DefaultTableModel(dados, tituloColuna) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+
+        });
+        tblCliente.getColumnModel().getColumn(0).setPreferredWidth(100);
+        tblCliente.getColumnModel().getColumn(1).setPreferredWidth(300);
+        tblCliente.getColumnModel().getColumn(2).setPreferredWidth(150);
+        tblCliente.getColumnModel().getColumn(3).setPreferredWidth(200);
+        tblCliente.getColumnModel().getColumn(4).setPreferredWidth(200);
+
+        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
+        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
+        tblCliente.getColumnModel().getColumn(0).setCellRenderer(centralizado);
+        tblCliente.setRowHeight(25);
+        tblCliente.updateUI();
+    }
+
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -45,11 +87,11 @@ public class ClienteView extends javax.swing.JInternalFrame {
         txtBairro = new javax.swing.JTextField();
         txtCPF = new javax.swing.JTextField();
         btnSalvar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnAlterar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
+        btnLimpa = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblCliente = new javax.swing.JTable();
 
         jLabel1.setText("Código:");
 
@@ -80,18 +122,28 @@ public class ClienteView extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton2.setText("Alterar");
-
-        jButton3.setText("Excluir");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnAlterar.setText("Alterar");
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnAlterarActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Novo");
+        btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        btnLimpa.setText("Novo");
+        btnLimpa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpaActionPerformed(evt);
+            }
+        });
+
+        tblCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -102,7 +154,7 @@ public class ClienteView extends javax.swing.JInternalFrame {
                 "Código", "Nome", "Endereço", "Bairro", "CPF"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblCliente);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -126,11 +178,11 @@ public class ClienteView extends javax.swing.JInternalFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(btnSalvar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                                .addComponent(jButton2)
+                                .addComponent(btnAlterar)
                                 .addGap(50, 50, 50)
-                                .addComponent(jButton3)
+                                .addComponent(btnExcluir)
                                 .addGap(52, 52, 52)
-                                .addComponent(jButton4)))
+                                .addComponent(btnLimpa)))
                         .addGap(54, 54, 54)
                         .addComponent(jLabel5)
                         .addGap(18, 18, 18)
@@ -164,12 +216,12 @@ public class ClienteView extends javax.swing.JInternalFrame {
                 .addGap(58, 58, 58)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(btnAlterar)
+                    .addComponent(btnExcluir)
+                    .addComponent(btnLimpa))
                 .addGap(35, 35, 35)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(177, Short.MAX_VALUE))
+                .addContainerGap(181, Short.MAX_VALUE))
         );
 
         pack();
@@ -184,95 +236,101 @@ public class ClienteView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtEnderecoActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-       if (txtNome.getText().isEmpty() || txtEndereco.getText().isEmpty())
-      {
-JOptionPane.showMessageDialog(null, "Preencha todos os campos !");
-}else{         
-      
-cliente = new Cliente();
-cliente.setNomeCliente(txtNome.getText());
-cliente.setEnderecoCliente(txtEndereco.getText());
-cliente.setBairroCliente(txtBairro.getText());
-cliente.setCPFCliente(txtCPF.getText());
-      }
-try{
-clienteDAO.salvar(cliente);
-}catch (SQLException ex){
-Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
-}
-JOptionPane.showMessageDialog(null, "Gravado com sucesso!");
-                                      
+        if (txtNome.getText().isEmpty() || txtEndereco.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos !");
+        } else {
 
-  
+            cliente = new Cliente();
+            cliente.setNomeCliente(txtNome.getText());
+            cliente.setEnderecoCliente(txtEndereco.getText());
+            cliente.setBairroCliente(txtBairro.getText());
+            cliente.setCPFCliente(txtCPF.getText());
+        }
+        try {
+            clienteDAO.salvar(cliente);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JOptionPane.showMessageDialog(null, "Gravado com sucesso!");
+
+        atualizarTabelaCliente();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
- if (txtCodigo.getText().isEmpty()){
-           
-        
-         JOptionPane.showMessageDialog(null, "Selecione o código do Cliente!");
-       } else {
-           cliente = new Cliente();
-          
-           cliente.setCodigocliente(Integer.parseInt(txtCodigo.getText()));
-           int confirma = JOptionPane.showConfirmDialog(null,"Deseja realmente Excluir?"+ txtNome.getText());
-           if (confirma == 0){
-               
-               try {                  
-                   clienteDAO.excluir(cliente);
-               } catch (SQLException ex) {
-                   Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
-               }
-                   
-                   
-               
-               }
-           }
-           
-       
-    }                                      
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        if (txtCodigo.getText().isEmpty()) {
 
-    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {                                           
-       if (txtCodigo.getText().isEmpty()){
-       
-       JOptionPane.showMessageDialog(null, "Selecione um Cliente!");
-       }
-       cliente = new Cliente();
-       cliente.setCodigocliente(Integer.parseInt(txtCodigo.getText()));
-       cliente.setNomeCliente(txtNome.getText());
-       cliente.setEnderecoCliente(txtEndereco.getText());
-       cliente.setBairroCliente(txtBairro.getText());
-        cliente.setCPFCliente(txtCPF.getText());
-       
-            try {
-                clienteDAO.alterar(cliente);
-                
-                 JOptionPane.showMessageDialog(null, "Cliente Alterado!");
-            } catch (SQLException ex) {
-                Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Selecione o código do Cliente!");
+        } else {
+            cliente = new Cliente();
+
+            cliente.setCodigocliente(Integer.parseInt(txtCodigo.getText()));
+            int confirma = JOptionPane.showConfirmDialog(null, "Deseja realmente Excluir?" + txtNome.getText());
+            if (confirma == 0) {
+
+                try {
+                    clienteDAO.excluir(cliente);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                atualizarTabelaCliente();
             }
-       
-      
-                       // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnLimpaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpaActionPerformed
+        limpaCamposCliente();
+        atualizarTabelaCliente();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLimpaActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        if (txtCodigo.getText().isEmpty()) {
+
+            JOptionPane.showMessageDialog(null, "Selecione um Cliente!");
+        }
+        cliente = new Cliente();
+        cliente.setCodigocliente(Integer.parseInt(txtCodigo.getText()));
+        cliente.setNomeCliente(txtNome.getText());
+        cliente.setEnderecoCliente(txtEndereco.getText());
+        cliente.setBairroCliente(txtBairro.getText());
+        cliente.setCPFCliente(txtCPF.getText());
+
+        try {
+            clienteDAO.alterar(cliente);
+
+            JOptionPane.showMessageDialog(null, "Cliente Alterado!");
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        atualizarTabelaCliente();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAlterarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAlterar;
+    private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnLimpa;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblCliente;
     private javax.swing.JTextField txtBairro;
     private javax.swing.JTextField txtCPF;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtEndereco;
     private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
+private void limpaCamposCliente() {
+        txtCodigo.setText("");
+        txtNome.setText("");
+        txtEndereco.setText("");
+        txtBairro.setText("");
+        txtCPF.setText("");
+    }
 }

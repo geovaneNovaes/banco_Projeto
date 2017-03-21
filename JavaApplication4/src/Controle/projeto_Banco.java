@@ -12,8 +12,9 @@ import View.Principal;
  * @author rrs
  */
 public class projeto_Banco {
-    public static void main(String[] args){
-        
+
+    public static void main(String[] args) {
+
         Principal principal = new Principal();
     }
 }

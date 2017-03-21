@@ -17,83 +17,78 @@ import java.util.List;
  * @author Deyvid
  */
 public class ClienteDAO {
-     PreparedStatement pst;
-   String sql;
-   
-   public void salvar(Cliente cliente) throws SQLException {
-   
-   sql = "insert into cliente values (?,?,?,?,?)";
-   pst = Conexao.getInstance().prepareStatement(sql);
-   pst.setInt(1,0);
-   pst.setString(2, cliente.getNomeCliente());
-   pst.setString(3, cliente.getEnderecoCliente());
-   pst.setString(4, cliente.getBairroCliente());
-   pst.setString(5, cliente.getCPFCliente());
-   
-   pst.execute ();
-   pst.close();
-   }
-   
- public List<Cliente> ListaCliente () throws SQLException{
-   
-   List<Cliente> listaClientes;
-   listaClientes = new ArrayList<> ();
-   sql = "select * from cliente order by codigo";
-   pst = Conexao.getInstance ().prepareStatement (sql);
-   ResultSet rs = pst.executeQuery();
-   while (rs.next()){
-     listaClientes.add(new Cliente (rs.getInt("codigo"), rs.getString ("nome"),
-             rs.getString("endereco"), rs.getString ("bairro"), rs.getString("CPF")));
-   
-   }
-   
-  
-   
-   pst.close();
-   return listaClientes;
-   
-   
-   
-   }
-   
-    public void excluir(Cliente cliente) throws SQLException{
-     sql = "delete from cliente where codigo=?";
-     pst = Conexao.getInstance().prepareStatement(sql);
-     pst.setInt(1,cliente.getCodigocliente());
-     pst.execute();
-     pst.close();
-       
-       
-   }
-    public void alterar (Cliente cliente) throws SQLException{
+
+    PreparedStatement pst;
+    String sql;
+
+    public void salvar(Cliente cliente) throws SQLException {
+
+        sql = "insert into cliente values (?,?,?,?,?)";
+        pst = Conexao.getInstance().prepareStatement(sql);
+        pst.setInt(1, 0);
+        pst.setString(2, cliente.getNomeCliente());
+        pst.setString(3, cliente.getEnderecoCliente());
+        pst.setString(4, cliente.getBairroCliente());
+        pst.setString(5, cliente.getCPFCliente());
+
+        pst.execute();
+        pst.close();
+    }
+
+    public List<Cliente> ListaCliente() throws SQLException {
+
+        List<Cliente> listaClientes;
+        listaClientes = new ArrayList<>();
+        sql = "select * from cliente order by codigo";
+        pst = Conexao.getInstance().prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+        while (rs.next()) {
+            listaClientes.add(new Cliente(rs.getInt("codigo"), rs.getString("nome"),
+                    rs.getString("endereco"), rs.getString("bairro"), rs.getString("CPF")));
+
+        }
+
+        pst.close();
+        return listaClientes;
+
+    }
+
+    public void excluir(Cliente cliente) throws SQLException {
+        sql = "delete from cliente where codigo=?";
+        pst = Conexao.getInstance().prepareStatement(sql);
+        pst.setInt(1, cliente.getCodigocliente());
+        pst.execute();
+        pst.close();
+
+    }
+
+    public void alterar(Cliente cliente) throws SQLException {
         sql = "update cliente set nome=?, endereco=?, bairro=?, CPF=? where codigo=?";
         pst = Conexao.getInstance().prepareStatement(sql);
-         pst.setInt(5, cliente.getCodigocliente());
+        pst.setInt(5, cliente.getCodigocliente());
         pst.setString(1, cliente.getNomeCliente());
         pst.setString(2, cliente.getEnderecoCliente());
         pst.setString(3, cliente.getBairroCliente());
         pst.setString(4, cliente.getCPFCliente());
         pst.setInt(5, cliente.getCodigocliente());
         pst.execute();
-        pst.close();        
-        
-           
-    } 
-    
-   public void mostrarCliente (Cliente cliente )throws SQLException{
-               sql = "select from cliente set nome=?, endereco=?, bairro=?, CPF=? where codigo=?";
-               pst = Conexao.getInstance().prepareStatement(sql);
-                  pst = Conexao.getInstance().prepareStatement(sql);
-         pst.setInt(5, cliente.getCodigocliente());
+        pst.close();
+
+    }
+
+    public void mostrarCliente(Cliente cliente) throws SQLException {
+        sql = "select from cliente set nome=?, endereco=?, bairro=?, CPF=? where codigo=?";
+        pst = Conexao.getInstance().prepareStatement(sql);
+        pst = Conexao.getInstance().prepareStatement(sql);
+        pst.setInt(5, cliente.getCodigocliente());
         pst.setString(1, cliente.getNomeCliente());
         pst.setString(2, cliente.getEnderecoCliente());
         pst.setString(3, cliente.getBairroCliente());
         pst.setString(4, cliente.getCPFCliente());
         pst.setInt(5, cliente.getCodigocliente());
         pst.execute();
-        pst.close();  
-               
-   }
-    
-    
+        pst.close();
+
+    }
+
 }

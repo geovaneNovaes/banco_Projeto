@@ -2,25 +2,23 @@ package Model;
 
 public class Cliente {
 
-    public Cliente(int codigocliente, String nomeCliente, String enderecoCliente, String bairroCliente, String CPFCliente ){
+    public Cliente(int codigocliente, String nomeCliente, String enderecoCliente, String bairroCliente, String CPFCliente) {
         this.codigocliente = codigocliente;
         this.nomeCliente = nomeCliente;
         this.enderecoCliente = enderecoCliente;
         this.bairroCliente = bairroCliente;
         this.CPFCliente = CPFCliente;
     }
-    
+
     private int codigocliente;
-    private String nomeCliente ;
-    private String enderecoCliente ;
-    private String bairroCliente ;
-    private String CPFCliente ;
+    private String nomeCliente;
+    private String enderecoCliente;
+    private String bairroCliente;
+    private String CPFCliente;
 
     public Cliente() {
-        
-        
+
     }
- 
 
     public int getCodigocliente() {
         return codigocliente;
@@ -74,7 +72,8 @@ public class Cliente {
     public void setBairroCliente(String bairroCliente) {
         this.bairroCliente = bairroCliente;
     }
-      /**
+
+    /**
      * @return the codigocliente
      */
     public String getCPFCliente() {
@@ -86,6 +85,5 @@ public class Cliente {
      */
     public void setCPFCliente(String CPFCliente) {
         this.CPFCliente = CPFCliente;
-    }    
+    }
 }
-

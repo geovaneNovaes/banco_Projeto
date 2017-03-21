@@ -95,7 +95,7 @@ public class Principal extends javax.swing.JFrame {
     private void ClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClienteActionPerformed
         // TODO add your handling code here:
         ClienteView cliente = new ClienteView();
-        
+
         pnl_Principal.removeAll();
         pnl_Principal.add(cliente);
         pnl_Principal.updateUI();
