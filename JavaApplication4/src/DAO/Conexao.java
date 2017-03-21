@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
 public class Conexao implements Serializable {
 
     private static Conexao conexao = null;
@@ -16,10 +17,10 @@ public class Conexao implements Serializable {
     private Conexao() {
         // Altere o usuário e senha de acordo com o banco de dados instalado
         usuario = "root";
-        senha = "96551306";
-
+        senha = "root";
+        
         // Defina aqui o nome do seu banco de dados
-        url = "jdbc:mysql://localhost:3306/banco_Projeto";
+        url = "jdbc:mysql://localhost:3306/locadora";
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
