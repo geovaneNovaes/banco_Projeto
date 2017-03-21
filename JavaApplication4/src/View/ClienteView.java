@@ -54,6 +54,7 @@ public class ClienteView extends javax.swing.JInternalFrame {
                 false, false, false, false, false
             };
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
@@ -89,7 +90,7 @@ public class ClienteView extends javax.swing.JInternalFrame {
         btnSalvar = new javax.swing.JButton();
         btnAlterar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
-        btnLimpa = new javax.swing.JButton();
+        btnNovo = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCliente = new javax.swing.JTable();
 
@@ -103,19 +104,28 @@ public class ClienteView extends javax.swing.JInternalFrame {
 
         jLabel5.setText("CPF:");
 
+        txtCodigo.setEnabled(false);
         txtCodigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCodigoActionPerformed(evt);
             }
         });
 
+        txtNome.setEnabled(false);
+
+        txtEndereco.setEnabled(false);
         txtEndereco.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtEnderecoActionPerformed(evt);
             }
         });
 
+        txtBairro.setEnabled(false);
+
+        txtCPF.setEnabled(false);
+
         btnSalvar.setText("Salvar");
+        btnSalvar.setEnabled(false);
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalvarActionPerformed(evt);
@@ -123,6 +133,7 @@ public class ClienteView extends javax.swing.JInternalFrame {
         });
 
         btnAlterar.setText("Alterar");
+        btnAlterar.setEnabled(false);
         btnAlterar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAlterarActionPerformed(evt);
@@ -130,16 +141,17 @@ public class ClienteView extends javax.swing.JInternalFrame {
         });
 
         btnExcluir.setText("Excluir");
+        btnExcluir.setEnabled(false);
         btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExcluirActionPerformed(evt);
             }
         });
 
-        btnLimpa.setText("Novo");
-        btnLimpa.addActionListener(new java.awt.event.ActionListener() {
+        btnNovo.setText("Novo");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimpaActionPerformed(evt);
+                btnNovoActionPerformed(evt);
             }
         });
 
@@ -154,6 +166,11 @@ public class ClienteView extends javax.swing.JInternalFrame {
                 "Código", "Nome", "Endereço", "Bairro", "CPF"
             }
         ));
+        tblCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblClienteMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblCliente);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -171,18 +188,20 @@ public class ClienteView extends javax.swing.JInternalFrame {
                             .addComponent(jLabel4))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtEndereco)
+                            .addComponent(txtEndereco, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
                             .addComponent(txtCodigo)
                             .addComponent(txtNome, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtBairro, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnSalvar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                                .addGap(13, 13, 13)
+                                .addComponent(btnNovo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnAlterar)
                                 .addGap(50, 50, 50)
                                 .addComponent(btnExcluir)
-                                .addGap(52, 52, 52)
-                                .addComponent(btnLimpa)))
+                                .addGap(34, 34, 34)
+                                .addComponent(btnSalvar)
+                                .addGap(12, 12, 12)))
                         .addGap(54, 54, 54)
                         .addComponent(jLabel5)
                         .addGap(18, 18, 18)
@@ -218,10 +237,10 @@ public class ClienteView extends javax.swing.JInternalFrame {
                     .addComponent(btnSalvar)
                     .addComponent(btnAlterar)
                     .addComponent(btnExcluir)
-                    .addComponent(btnLimpa))
+                    .addComponent(btnNovo))
                 .addGap(35, 35, 35)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(181, Short.MAX_VALUE))
+                .addContainerGap(185, Short.MAX_VALUE))
         );
 
         pack();
@@ -236,24 +255,44 @@ public class ClienteView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtEnderecoActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        if (txtNome.getText().isEmpty() || txtEndereco.getText().isEmpty()) {
+        if (txtEndereco.getText().isEmpty() || txtCPF.getText().isEmpty() || txtNome.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Preencha todos os campos !");
-        } else {
+        } else if (txtCodigo.getText().isEmpty()) {
 
             cliente = new Cliente();
             cliente.setNomeCliente(txtNome.getText());
             cliente.setEnderecoCliente(txtEndereco.getText());
             cliente.setBairroCliente(txtBairro.getText());
             cliente.setCPFCliente(txtCPF.getText());
-        }
         try {
             clienteDAO.salvar(cliente);
         } catch (SQLException ex) {
             Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
         }
         JOptionPane.showMessageDialog(null, "Gravado com sucesso!");
-
+        preparaSalvar();
+        desativaCampos();
+        limpaCamposCliente();
         atualizarTabelaCliente();
+        }
+        else{
+            cliente = new Cliente();
+            cliente.setCodigocliente(Integer.parseInt(txtCodigo.getText()));
+            cliente.setNomeCliente(txtNome.getText());
+            cliente.setEnderecoCliente(txtEndereco.getText());
+            cliente.setBairroCliente(txtBairro.getText());
+            cliente.setCPFCliente(txtCPF.getText());
+        try {
+            clienteDAO.salvar(cliente);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JOptionPane.showMessageDialog(null, "Gravado com sucesso!");
+        preparaSalvar();
+        desativaCampos();
+        atualizarTabelaCliente();
+        }
+        
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
@@ -273,15 +312,19 @@ public class ClienteView extends javax.swing.JInternalFrame {
                     Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 atualizarTabelaCliente();
+                limpaCamposCliente();
+                preparaExcluir();
             }
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
-    private void btnLimpaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpaActionPerformed
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
         limpaCamposCliente();
+        ativaCampos();
+        preparaNovo();
         atualizarTabelaCliente();
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnLimpaActionPerformed
+    }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
         if (txtCodigo.getText().isEmpty()) {
@@ -304,14 +347,27 @@ public class ClienteView extends javax.swing.JInternalFrame {
         }
 
         atualizarTabelaCliente();
+        preparaAlterar();
+        ativaCampos();
+        
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void tblClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClienteMouseClicked
+        // TODO add your handling code here:
+        txtCodigo.setText(tblCliente.getValueAt(tblCliente.getSelectedRow(),0).toString());
+        txtNome.setText(tblCliente.getValueAt(tblCliente.getSelectedRow(),0).toString());
+        txtEndereco.setText(tblCliente.getValueAt(tblCliente.getSelectedRow(),0).toString());
+        txtBairro.setText(tblCliente.getValueAt(tblCliente.getSelectedRow(),0).toString());
+        txtCPF.setText(tblCliente.getValueAt(tblCliente.getSelectedRow(),0).toString());
+        preparaselecaotabela();
+    }//GEN-LAST:event_tblClienteMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnExcluir;
-    private javax.swing.JButton btnLimpa;
+    private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -333,4 +389,49 @@ private void limpaCamposCliente() {
         txtBairro.setText("");
         txtCPF.setText("");
     }
+
+    public void ativaCampos() {
+        txtNome.setEnabled(true);
+        txtEndereco.setEnabled(true);
+        txtBairro.setEnabled(true);
+        txtCPF.setEnabled(true);
+    }
+
+    public void desativaCampos() {
+        txtNome.setEnabled(false);
+        txtEndereco.setEnabled(false);
+        txtBairro.setEnabled(false);
+        txtCPF.setEnabled(false);
+    }
+
+    public void preparaNovo() {
+        btnNovo.setEnabled(false);
+        btnSalvar.setEnabled(true);
+        tblCliente.setEnabled(false);
+        tblCliente.clearSelection();
+
+    }
+    public void preparaSalvar () {
+        btnNovo.setEnabled(true);
+        btnSalvar.setEnabled(false);
+        tblCliente.setEnabled(true);
+        }
+    public void preparaselecaotabela() {
+        btnNovo.setEnabled(true);
+        btnSalvar.setEnabled(true);
+        btnExcluir.setEnabled(true);
+        btnAlterar.setEnabled(true);
+      }
+    public void preparaAlterar() {
+        btnNovo.setEnabled(false);
+        btnExcluir.setEnabled(false);
+        btnAlterar.setEnabled(false);
+        btnSalvar.setEnabled(true);
+        tblCliente.setEnabled(false);
+        tblCliente.clearSelection();
+    }
+    public void preparaExcluir() {
+        btnAlterar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+        }
 }
